@@ -1,14 +1,14 @@
 - name: download java
   get_url:
-    url: http://download.oracle.com/otn-pub/java/jdk/8u102-b14/jdk-8u102-linux-x64.tar.gz
-    dest: /tmp/jdk-8u102-linux-x64.tar.gz
+    url: "{{ java_dounload_url }}"
+    dest: "/tmp/{{ java_archive }}"
     validate_certs: no
     headers: "Cookie: ' gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie'"
-    sha256sum: 7cfbe0bc0391a4abe60b3e9eb2a541d2315b99b9cb3a24980e618a89229e04b7
+    sha256sum: "{{ java_sha256 }}"
 
-- name: create /opt/local
+- name: should exist base dir
   file:
-    dest: /opt/local/
+    dest: "{{ base_dir }}"
     state: directory
     recurse: true
     mode: 0755
@@ -21,14 +21,14 @@
     LC_MESSAGES: C
   unarchive:
     copy: no
-    src: /tmp/jdk-8u102-linux-x64.tar.gz
-    dest: /opt/local
-    creates: /opt/local/jdk1.8.0_102
+    src: "/tmp/{{ java_archive }}"
+    dest: "{{ base_dir }}"
+    creates: "{{ jdk_dir }}"
 
 - name: create symlink
   file:
-    src: /opt/local/jdk1.8.0_102
-    dest: /opt/local/jdk
+    src: "{{ jdk_dir }}"
+    dest: "{{ JAVA_HOME }}"
     state: link
 
 - name: add to path
@@ -37,14 +37,5 @@
     dest: /etc/profile.d/java.sh
     mode: 0644
     block: |
-      export JAVA_HOME=/opt/local/jdk
-      export PATH=$PATH:$JAVA_HOME/bin
-
-- name: add to root path
-  blockinfile:
-    create: yes
-    dest: /root/bash_profile
-    mode: 0644
-    block: |
-      export JAVA_HOME=/opt/local/jdk
+      export JAVA_HOME={{ JAVA_HOME }}
       export PATH=$PATH:$JAVA_HOME/bin

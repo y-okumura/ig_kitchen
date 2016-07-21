@@ -1,0 +1,8 @@
+---
+base_dir: /opt/local
+JAVA_HOME: "{{ base_dir }}/jdk"
+# 8u102の設定
+jdk_dir: "{{base_dir}}/jdk1.8.0_102"
+java_archive: "jdk-8u102-linux-x64.tar.gz"
+java_dounload_url: "http://download.oracle.com/otn-pub/java/jdk/8u102-b14/{{java_archive}}"
+java_sha256: 7cfbe0bc0391a4abe60b3e9eb2a541d2315b99b9cb3a24980e618a89229e04b7
