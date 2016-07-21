@@ -1,0 +1,5 @@
+- name: download openig
+  get_url:
+    url: https://backstage.forgerock.com/cp/portal/cloudstorage/AVKC50BRwLBPh3c27BPO?redirect
+    dest: "{{ jetty_home }}/root.war"
+    validate_certs: no
