@@ -1,3 +1,4 @@
 - hosts: RP
   roles:
     - java
+    - jetty

@@ -1,0 +1,8 @@
+---
+base_dir: /opt/local
+jetty_home: "{{ base_dir }}/jetty"
+# jetty9.3.10の設定
+jetty_version: 9.3.10.v20160621
+jetty_archive: jetty-distribution-{{ jetty_version }}.tar.gz
+jetty_dounload_url: http://repo1.maven.org/maven2/org/eclipse/jetty/jetty-distribution/{{ jetty_version }}/{{ jetty_archive }}
+jetty_dir: "{{ base_dir }}/jetty-distribution-{{ jetty_version }}"
