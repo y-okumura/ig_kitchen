@@ -44,6 +44,7 @@
     src: "{{ jetty_home }}/bin/jetty.sh"
     dest: "/etc/init.d/jetty"
     state: link
+  register: jetty_init_d
 
 - name: create jetty config
   become: true
@@ -56,6 +57,7 @@
       JETTY_USER={{ jetty_user }}
       JETTY_HOST=0.0.0.0
       JAVA={{ JAVA_HOME }}/bin/java
+  register: jetty_config
 
 - name: jetty service
   become: true
@@ -63,3 +65,12 @@
     name: jetty
     enabled: yes
     state: restarted
+  when: jetty_init_d.changed or jetty_config.changed
+
+- name: jetty service started
+  become: true
+  service:
+    name: jetty
+    enabled: yes
+    state: started
+  when: not (jetty_init_d.changed or jetty_config.changed)

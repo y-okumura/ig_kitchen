@@ -5,6 +5,7 @@
     remote_src: true
     src: "{{ download_dir }}/openig-war-4.0.0.war"
     dest: "{{jetty_home}}/webapps/root.war"
+  register: openig_war
 
 - name: restart jetty
   become: true
@@ -12,3 +13,4 @@
     name: jetty
     enabled: yes
     state: restarted
+  when: openig_war.changed
