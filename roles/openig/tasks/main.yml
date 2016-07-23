@@ -1,5 +1,14 @@
-- name: download openig
-  get_url:
-    url: https://backstage.forgerock.com/cp/portal/cloudstorage/AVKC50BRwLBPh3c27BPO?redirect
-    dest: "{{ jetty_home }}/root.war"
-    validate_certs: no
+- name: deploy to root
+  become: true
+  become_user: "{{jetty_user}}"
+  copy:
+    remote_src: true
+    src: "{{ download_dir }}/openig-war-4.0.0.war"
+    dest: "{{jetty_home}}/webapps/root.war"
+
+- name: restart jetty
+  become: true
+  service:
+    name: jetty
+    enabled: yes
+    state: restarted
