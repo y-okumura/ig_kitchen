@@ -1,0 +1,47 @@
+---
+- name: download
+  get_url:
+    url: http://maven.forgerock.org/repo/releases/org/forgerock/openig/openig-doc/4.0.0/openig-doc-4.0.0-jar-with-dependencies.jar
+    dest: "{{ download_dir }}/openig-doc-4.0.0-jar-with-dependencies.jar"
+
+- group:
+    name: openig
+  become: true
+
+- user:
+    name: openig
+    group: openig
+  become: true
+
+- file:
+    path: "{{ openig_doc_home }}"
+    state: directory
+    recurse: true
+    mode: 0755
+    owner: openig
+    group: openig
+  become: true
+
+- name: copy into /opt/local
+  become: true
+  copy:
+    remote_src: true
+    src: "{{ download_dir }}/openig-doc-4.0.0-jar-with-dependencies.jar"
+    dest: "{{ base_dir }}/openig-doc/openig-doc-4.0.0.jar"
+    owner: openig
+    group: openig
+
+- name: store init.d
+  become: true
+  template:
+    src: roles/openig-doc/templates/openig_doc
+    dest: /etc/init.d/openig_doc
+    mode: 0755
+  register: openig_service
+
+- service:
+    name: openig_doc
+    enabled: yes
+    state: restarted
+  when: openig_service.changed
+  become: true

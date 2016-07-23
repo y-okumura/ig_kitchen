@@ -1,0 +1,53 @@
+# chkconfig: 345 98 20
+# description: openig documents HTTP server
+# processname: openig_doc
+
+SERVICE_NAME=openig_doc
+JAR={{ openig_doc_jar_path }}
+PID_FILE={{ openig_doc_home }}/pid
+LOG={{ openig_doc_home }}/openig_doc.log
+JAVA={{JAVA_HOME}}/bin/java
+USER=openig
+case $1 in
+    start)
+        echo "Starting $SERVICE_NAME ..."
+        if [ ! -f $PID_FILE ]; then
+            sudo -u $USER sh -c "nohup $JAVA -jar $JAR > $LOG 2>&1 & echo \$! > $PID_FILE"
+            echo "$SERVICE_NAME started ..."
+        else
+            echo "$SERVICE_NAME is already running ..."
+        fi
+    ;;
+    stop)
+        if [ -f $PID_FILE ]; then
+            PID=$(cat $PID_FILE);
+            echo "$SERVICE_NAME stoping ..."
+            sudo -u $USER kill $PID;
+            echo "$SERVICE_NAME stopped ..."
+            sudo -u $USER rm $PID_FILE
+        else
+            echo "$SERVICE_NAME is not running ..."
+        fi
+    ;;
+    restart)
+        if [ -f $PID_FILE ]; then
+            PID=$(cat $PID_FILE);
+            echo "$SERVICE_NAME stopping ...";
+            sudo -u $USER kill $PID;
+            echo "$SERVICE_NAME stopped ...";
+            sudo -u $USER rm $PID_FILE
+        else
+            echo "$SERVICE_NAME is not running ..."
+        fi
+        echo "$SERVICE_NAME starting ..."
+        sudo -u $USER sh -c "nohup $JAVA -jar $JAR > $LOG 2>&1 & echo \$! > $PID_FILE"
+        echo "$SERVICE_NAME started ..."
+    ;;
+    status)
+    if [ -f $PID_FILE ]; then
+        echo "$SERVICE_NAME is running.";
+    else
+        echo "$SERVICE_NAME is stoped."
+    fi
+    ;;
+esac

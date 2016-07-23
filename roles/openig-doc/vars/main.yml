@@ -1,0 +1,4 @@
+---
+openig_doc_home: "{{ base_dir }}/openig-doc"
+openig_doc_log_path: "{{ base_dir }}/openig-doc/log"
+openig_doc_jar_path: "{{ openig_doc_home }}/openig-doc-4.0.0.jar"
