@@ -14,6 +14,8 @@ suites:
   - name: RP
     driver:
       name: vagrant
+      synced_folders:
+        - ["modules", "/tmp/modules"]
       network:
         - ["private_network", { ip: "192.168.33.10" }]
     provisioner:

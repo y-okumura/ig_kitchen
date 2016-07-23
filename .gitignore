@@ -2,3 +2,6 @@
 .kitchen.local.yml
 
 vendor/bundle
+.vagrant/
+playbook.retry
+modules/*

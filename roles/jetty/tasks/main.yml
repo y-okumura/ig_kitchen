@@ -1,26 +1,21 @@
 - name: create jetty group
+  become: true
   group:
     name: jetty
 
 - name: create jetty user
+  become: true
   user:
-    name: jetty
-    group: jetty
+    name: "{{ jetty_user }}"
+    group: "{{ jetty_group }}"
     append: yes
 
 - name: download jetty
   get_url:
     url: "{{ jetty_dounload_url }}"
-    dest: "/tmp/{{ jetty_archive }}"
+    dest: "{{ download_dir }}/{{ jetty_archive }}"
     validate_certs: no
 #    sha256sum: "{{ jetty_sha256 }}" チェックサムが無かった。怖い。
-
-- name: should exist base dir
-  file:
-    dest: "{{ base_dir }}"
-    state: directory
-    recurse: true
-    mode: 0755
 
 - name: extract jetty
   become: true
@@ -30,32 +25,40 @@
     LC_MESSAGES: C
   unarchive:
     copy: no
-    src: "/tmp/{{ jetty_archive }}"
+    src: "{{ download_dir }}/{{ jetty_archive }}"
     dest: "{{ base_dir }}"
     creates: "{{ jetty_dir }}"
+    owner: "{{ jetty_user }}"
+    group: "{{ jetty_group }}"
 
 - name: create symlink
+  become: true
   file:
     src: "{{ jetty_dir }}"
     dest: "{{ jetty_home }}"
     state: link
 
 - name: add jetty to init.d
+  become: true
   file:
     src: "{{ jetty_home }}/bin/jetty.sh"
     dest: "/etc/init.d/jetty"
     state: link
 
 - name: create jetty config
+  become: true
   blockinfile:
     create: yes
     dest: /etc/default/jetty
     mode: 0644
     block: |
       JETTY_HOME={{ jetty_home }}
+      JETTY_USER={{ jetty_user }}
+      JETTY_HOST=0.0.0.0
       JAVA={{ JAVA_HOME }}/bin/java
 
 - name: jetty service
+  become: true
   service:
     name: jetty
     enabled: yes

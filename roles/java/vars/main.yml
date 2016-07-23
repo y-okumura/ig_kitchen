@@ -1,5 +1,4 @@
 ---
-base_dir: /opt/local
 JAVA_HOME: "{{ base_dir }}/jdk"
 # 8u102の設定
 jdk_dir: "{{base_dir}}/jdk1.8.0_102"

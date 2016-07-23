@@ -1,0 +1,8 @@
+---
+- name: should exist base dir
+  become: true
+  file:
+    dest: "{{ base_dir }}"
+    state: directory
+    recurse: true
+    mode: 0755

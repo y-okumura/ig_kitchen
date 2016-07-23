@@ -2,4 +2,3 @@
 dependencies:
   - role: basic-dirs
   - role: libselinux-python
-  - role: java
