@@ -1,3 +1,3 @@
-describe command('curl http://localhost:8080/') do
-  its(:stdout) { should contain 'Welcome to Open Identity Gateway 4.0.0' }
+describe command('curl http://www.example.com:8080/') do
+  its(:stdout) { should contain 'src="https://forgerock.org/openig/"' }
 end

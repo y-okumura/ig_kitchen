@@ -1,0 +1,36 @@
+- name: write hosts file
+  lineinfile:
+    dest: /etc/hosts
+    line: "{{ target_host_ip_addr }}  {{ target_host_name }}"
+  become: true
+
+- name: make config and routes dir
+  become: true
+  become_user: jetty
+  file:
+    path: "{{ openig_config_dir }}/routes/"
+    state: directory
+    recurse: true
+
+- name: write openig config.json
+  become: true
+  become_user: jetty
+  template:
+    dest: "{{ openig_config_dir }}/config.json"
+    src: roles/openig-config_for_openig-doc/templates/config.json
+  register: openig_config
+
+- name: write routes file
+  become: true
+  become_user: jetty
+  template:
+    dest: "{{ openig_config_dir }}/routes/99-default.json"
+    src: roles/openig-config_for_openig-doc/templates/routes_99-default.json
+  register: openig_routes
+
+- name: restart jetty
+  when: openig_config.changed or openig_routes.changed
+  become: true
+  service:
+    name: jetty
+    state: restarted

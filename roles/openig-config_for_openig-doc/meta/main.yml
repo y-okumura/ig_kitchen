@@ -1,0 +1,4 @@
+---
+dependencies:
+  - role: openig
+  - role: openig-doc

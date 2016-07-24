@@ -1,0 +1,6 @@
+---
+target_domain: example.com
+target_host_name: www.{{ target_domain }}
+target_base_uri: http://{{ target_host_name }}:8081
+target_host_ip_addr: 192.168.33.10
+openig_config_dir: /home/jetty/.openig/config
