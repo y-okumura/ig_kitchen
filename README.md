@@ -22,14 +22,6 @@ windows上でAnsibleを動かすのは困難なので、Vagrantファイルの�
 openigをcurlで取って来るのが困難だったため、openigのwarファイルは事前にダウンロードして置くこととしました。
 [このリンク](https://backstage.forgerock.com/cp/portal/cloudstorage/AVKC50BRwLBPh3c27BPO?redirect)から事前にダウンロードして、modulesフォルダに入れてください。(要アカウント)
 
-### hosts ファイル
-
-openIGのチュートリアルの結果を確認するために、以下の記述をhostsファイルに記載する必要があります。
-
-```
-192.168.33.10 www.example.com
-```
-
 ### bundle install
 
 必要なものはGemfileにまとめているので、
@@ -40,6 +32,16 @@ bundle install --path vendor/bundle
 
 として必要なライブラリを取得してください。
 
+### hosts ファイル
+
+openIGのgettingstartedには、ブラウザを実行する環境でも以下の記述をhostsファイルに記載するように書かれています。
+
+```
+192.168.33.10 www.example.com
+```
+
+ただし、確認してみた限りでは、この記載がなくてもIPアドレスでアクセスすれば十分に動作を確認できました。
+
 実行方法
 =======
 
@@ -47,21 +49,34 @@ bundle install --path vendor/bundle
 bundle exec kitchen test
 ```
 
-で環境の立ち上げからテスト、シャットダウンまで自動で行います。  
+で環境の立ち上げからテスト、シャットダウンまで自動で行います。
+
 実際に立ち上げた画面を見るためには、
 
 ```
 vagrant up
 ```
 
-して、 http://www.example.com:8080/ にアクセスください。
+します。
 
-起きていること
+プロキシ対象サーバーの動作
+======================
+
+openigのgetting startredでは、プロキシ対象の例として、8081ポートを待ち受ける[executable jarのhttpサーバー](http://192.168.33.10:8081/)を使用します。  
+このサーバーにアクセスすると、右上にログインフォームを表示し、その下にOpenIGのドキュメントをiframeで埋め込んだページが表示されます。
+
+このログインフォームにユーザ名: demo, パスワード: changeit を入れてログインすると、ユーザー名とリクエスト内容が記載されたページが表示されます。
+
+このサーバーのインストールと起動設定は[openig-docロール](roles/openig-doc)で行っています。
+
+OpenIGの動作
 ===========
 
-www.example.com(192.168.33.10)には8080ポートにOpenIGの乗ったjettyが、8081ポートにはOpenIGのドキュメントを表示するだけの小さなHTTPサーバーが乗っています。
+jettyがサービスとして起動され[8080ポート](http://192.168.33.10:8080/)を待ち受けるように[jettyロール](roles/jetty)でセットアップし、そのルートアプリケーションとして[openig](roles/openig)をデプロイしています。
 
-[openigの設定](roles/openig-config_for_openig-doc/templates/config.json)のテンプレートに[変数定義](roles/openig-config_for_openig-doc/vars/main.yml)が展開され、次のようなhandlerが作成されます。
+この[openigサーバー](http://192.168.33.10:8080/)にアクセスすると、リクエストがプロキシ対象サーバーに転送され、その結果をそのまま返します。
+
+この動作を設定しているのは[default](roles/openig-config_for_openig-doc/templates/routes/99-default.json)ルートと[設定ファイルのテンプレート](roles/openig-config_for_openig-doc/templates/config.json)に[変数](roles/openig-config_for_openig-doc/vars/main.yml)を展開した次のような設定です。
 
 ```json:handler定義
 "handler": {
