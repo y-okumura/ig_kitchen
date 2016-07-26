@@ -1,5 +1,4 @@
-OpenIGのチュートリアルをansibleでやってみる
---------------------------------------
+# [OpenIGのgetting started](https://backstage.forgerock.com/#!/docs/openig/4/gateway-guide#chap-quickstart)をansibleでやってみたkitchen
 
 前準備
 =====
@@ -30,3 +29,35 @@ bundle install --path vendor/bundle
 ```
 
 として必要なライブラリを取得してください。
+
+実行方法
+=======
+
+```
+bundle exec kitchen test
+```
+
+で環境の立ち上げからテスト、シャットダウンまで自動で行います。  
+実際に立ち上げた画面を見るためには、
+
+```
+vagrant up
+```
+
+して、 http://www.example.com:8080/ にアクセスください。
+
+起きていること
+===========
+
+www.example.com(192.168.33.10)には8080ポートにOpenIGの乗ったjettyが、8081ポートにはOpenIGのドキュメントを表示するだけの小さなHTTPサーバーが乗っています。
+
+[openigの設定](roles/openig-config_for_openig-doc/templates/config.json)のテンプレートに[変数定義](roles/openig-config_for_openig-doc/vars/main.yml)が展開され、次のようなhandlerが作成されます。
+
+```json:handler定義
+"handler": {
+    "type": "Router",
+    "audit": "global",
+    "baseURI": "http://www.example.com:8081",
+    "capture": "all"
+},
+```
