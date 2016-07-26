@@ -86,3 +86,5 @@ jettyがサービスとして起動され[8080ポート](http://192.168.33.10:80
     "capture": "all"
 },
 ```
+
+また、 http://www.example.com:8080/staticにアクセスすると、自動的に`{ "username": [ "demo" ], "password": [ "changeit" ] }`  でログインした結果が表示されます。こちらは、[/static](roles/openig-config_for_openig-doc/templates/routes/01-static.json) routeの設定と上記のhandlerによるものです。

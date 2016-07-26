@@ -1,0 +1,22 @@
+{
+    "handler": {
+        "type": "Chain",
+        "config": {
+            "filters": [
+                {
+                    "type": "StaticRequestFilter",
+                    "config": {
+                        "method": "POST",
+                        "uri": "{{ target_base_uri }}",
+                        "form": {
+                            "username": [ "demo" ],
+                            "password": [ "changeit" ]
+                        }
+                    }
+                }
+            ],
+            "handler": "ClientHandler"
+        }
+    },
+    "condition": "${matches(request.uri.path, '^/static')}"
+}

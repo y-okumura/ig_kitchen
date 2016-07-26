@@ -24,8 +24,11 @@
   become: true
   become_user: jetty
   template:
-    dest: "{{ openig_config_dir }}/routes/99-default.json"
-    src: roles/openig-config_for_openig-doc/templates/routes_99-default.json
+    dest: "{{ openig_config_dir }}/routes/{{ item }}"
+    src: roles/openig-config_for_openig-doc/templates/routes/{{ item }}
+  with_items:
+    - 01-static.json
+    - 99-default.json
   register: openig_routes
 
 - name: restart jetty
