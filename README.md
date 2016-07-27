@@ -7,7 +7,7 @@
 
 [bundler](http://bundler.io)（及び[Ruby](https://www.ruby-lang.org/ja/downloads/)と[RubyGems](https://rubygems.org/pages/download)）と,[Ansible](http://www.ansible.com)と[vagrant](https://www.vagrantup.com) (及び[Python](https://www.python.org)) がインストールされている必要があります。
 
-windows上でAnsibleを動かすのは困難なので、Vagrantファイルの末尾、
+windows上ではAnsibleを動かすのが困難なので、Vagrantファイルの末尾、
 ```ruby:Vagrantfile
   config.vm.provision "ansible" do |ansible|
 ```
@@ -15,7 +15,7 @@ windows上でAnsibleを動かすのは困難なので、Vagrantファイルの�
 ```ruby:vagrantfile
   config.vm.provision "ansible_local" do |ansible|
 ```
-と書き換えて、仮想マシン上でansibleを動かせるようにすればansibleのインストールは不要となります。
+と書き換えて、仮想マシン上でansibleを実行するようにしたほうが楽かもしれません。
 
 ### 事前にダウンロードしておく必要があるもの
 
