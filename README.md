@@ -5,7 +5,7 @@
 
 ### 必要なソフトウェア
 
-また、[bundler](http://bundler.io)（及び[Ruby](https://www.ruby-lang.org/ja/downloads/)と[RubyGems](https://rubygems.org/pages/download)）と[vagrant](https://www.vagrantup.com)がインストールされている必要があります。
+[bundler](http://bundler.io)（及び[Ruby](https://www.ruby-lang.org/ja/downloads/)と[RubyGems](https://rubygems.org/pages/download)）と[vagrant](https://www.vagrantup.com) (及び[Python](https://www.python.org)) がインストールされている必要があります。
 
 ### 事前にダウンロードしておく必要があるもの
 
